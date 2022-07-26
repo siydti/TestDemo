@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://unpkg.com/konva@8.3.5/konva.min.js"></script>
+    <meta charset="utf-8" />
+    <title>Konva Modify Curves with Anchor Points Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <svg width="190px" height="160px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10,10 H90 V90 H10 V10" stroke="red" fill="transparent" />
+
+        <path d="M0,0 Q0,0 0,280 M24,0 Q24,0 24,280 M48,0 Q48,0 48,280 M72,0 Q72,0 72,280 M96,0 Q96,0 96,280"
+            stroke="black" fill="transparent" />
+        <path d="M70 10 C 70 20, 120 20, 120 10" stroke="black" fill="transparent" />
+        <path d="M130 10 C 120 20, 180 20, 170 10" stroke="black" fill="transparent" />
+        <path d="M10 60 C 20 80, 40 80, 50 60" stroke="black" fill="transparent" />
+        <path d="M70 60 C 70 80, 110 80, 110 60" stroke="black" fill="transparent" />
+        <path d="M130 60 C 120 80, 180 80, 170 60" stroke="black" fill="transparent" />
+        <path d="M10 110 C 20 140, 40 140, 50 110" stroke="black" fill="transparent" />
+        <path d="M70 110 C 70 140, 110 140, 110 110" stroke="black" fill="transparent" />
+        <path d="M130 110 C 120 140, 180 140, 170 110" stroke="black" fill="transparent" />
+    </svg> -->
+
+    <div id="container"></div>
+    <script type="text/javascript">
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+
+        // function to build anchor point
+        function buildAnchor(x, y) {
+            var anchor = new Konva.Circle({
+                x: x,
+                y: y,
+                radius: 20,
+                stroke: '#666',
+                fill: '#ddd',
+                strokeWidth: 2,
+                draggable: true,
+            });
+            layer.add(anchor);
+
+            // add hover styling
+            anchor.on('mouseover', function () {
+                document.body.style.cursor = 'pointer';
+                this.strokeWidth(4);
+            });
+            anchor.on('mouseout', function () {
+                document.body.style.cursor = 'default';
+                this.strokeWidth(2);
+            });
+
+            anchor.on('dragmove', function () {
+                updateDottedLines();
+            });
+
+            return anchor;
+        }
+
+        var stage = new Konva.Stage({
+            container: 'container',
+            width: width,
+            height: height,
+        });
+
+        var layer = new Konva.Layer();
+        stage.add(layer);
+
+        layer.add(new Konva.TextPath({
+            id: 'textPath',
+            x: 100,
+            y: 100,
+            fill: '#333',
+            fontSize: 16,
+            fontFamily: 'Arial',
+            text:
+                "All the world's a stage,\n, and all the men and women merely players.All the world's a stage,\n, and all the men and women merely players.",
+            data: 'M0,0 Q140,260 280,0 M0,24 Q140,284 280,24',
+            draggable: true
+        }))
+
+        layer.add(new Konva.TextPath({
+            id: 'textPath',
+            x: 100,
+            y: 400,
+            fill: '#333',
+            fontSize: 16,
+            fontFamily: 'Arial',
+            // textBaseline: 'top',
+            // fontVariant: 'small-caps',
+            fontStyle: 'italic',
+            text:
+                "All the world's a stage, and all the men and women merely players.All the world's a stage, and all the men and women merely players.",
+            // data: 'M0,0 Q0,0 0,280 M24,0 Q24,0 24,280 M48,0 Q48,0 48,280 M72,0 Q72,0 72,280 M96,0 Q96,0 96,280',
+            data: 'M0,0 V280 M24,0 V280 M48,0 V280 M72,0 V280 M96,0 V280',
+            draggable: true
+        }))
+
+        const startPt = { x: 0, y: 0 }
+        const controlPt = { x: 50, y: 140 }
+        const endPt = { x: 0, y: 280 }
+        const Blength = quadraticBezierLength(startPt, controlPt, endPt)
+        console.log(Blength)
+
+        const text = `All 你好 the world's a stage, and all the men and women merely players.All the world's a stage, and all the men and women merely players.`
+        const text_line = '——————————————————————————————————————————————————————————————————————————'
+        console.log(text.length, text_line.length, (text.length * (16 / 2)) / Blength)
+
+        layer.add(new Konva.TextPath({
+            x: 400,
+            y: 400,
+            fill: '#333',
+            fontSize: 16,
+            fontFamily: 'Arial',
+            text,
+            data: 'M0,0 Q50,140 0,280 M24,0 Q74,140 24,280 M48,0 Q98,140 48,280 M87.84,61.6 Q108.6,140 87.84,218.4 ',
+            draggable: true
+        }))
+
+        const group = new Konva.Group({
+            x: 200,
+            y: 200,
+            draggable: true
+        })
+
+        layer.add(group)
+        group.add(new Konva.TextPath({
+            x: 0,
+            y: 0,
+            fontSize: 16,
+            fontFamily: 'Arial',
+            fill: 'red',
+            text: "默认文字内容ab",
+            data: "M4.229153608513787,16.306425701525278 Q117.84678714923736,132 4.229153608513787,247.69357429847472 ",
+            align: 'center',
+            textDecoration: 'underline',
+            textBaseline: 'top',
+        }))
+
+        /* 
+                M48,0 Q98,140 48,280
+                M72,0 Q122,140 72,280
+                M87.84,61.6 Q108.6,140 87.84,218.4
+        */
+        layer.add(new Konva.Path({
+            x: 400,
+            y: 400,
+            stroke: '#333',
+            // fontSize: 16,
+            // fontFamily: 'Arial',
+            // textBaseline: 'top',
+            // text: text_line,
+
+            data: 'M0,0 Q50,140 0,280 M24,0 Q74,140 24,280 M48,0 Q98,140 48,280 M87.84,61.6 Q108.6,140 87.84,218.4 M96,0 Q146,140 96,280',
+            draggable: true
+        }))
+
+        /* 求二阶贝塞尔曲线长度公式 */
+        function quadraticBezierLength(p0, p1, p2) {
+            var ax = p0.x - 2 * p1.x + p2.x;
+            var ay = p0.y - 2 * p1.y + p2.y;
+            var bx = 2 * p1.x - 2 * p0.x;
+            var by = 2 * p1.y - 2 * p0.y;
+            var A = 4 * (ax * ax + ay * ay);
+            var B = 4 * (ax * bx + ay * by);
+            var C = bx * bx + by * by;
+
+            var Sabc = 2 * Math.sqrt(A + B + C);
+            var A_2 = Math.sqrt(A);
+            var A_32 = 2 * A * A_2;
+            var C_2 = 2 * Math.sqrt(C);
+            var BA = B / A_2;
+
+            return (
+                (A_32 * Sabc +
+                    A_2 * B * (Sabc - C_2) +
+                    (4 * C * A - B * B) * Math.log((2 * A_2 + BA + Sabc) / (BA + C_2))) /
+                (4 * A_32)
+            );
+        }
+
+        layer.add( new Konva.TextPath({
+            x: 500,
+            y: 50,
+            data: "M0,48 H116.2 ",
+            text: "改   文   字",
+            fill: '#000',
+            fontSize: 24,
+            // width: 30
+            textDecoration: 'underline'
+        }) )
+
+
+        // const svg_text = `<svg width="120" height="140" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        //     <defs>
+        //         <path id="circlePath" d="M0,31.200000000000003 H120 M0,62.400000000000006 H120 M0,93.60000000000001 H120 " />
+        //     </defs>
+        //     <g fill="dodgerblue" font-size="24">
+        //         <text style="letter-spacing: 10;">
+        //             <textPath xlink:href="#circlePath">
+        //             默认文字内容abcd
+        //             </textPath>
+        //             <textPath xlink:href="#circlePath">
+        //             哈LMNOPQ
+        //             </textPath>
+        //         </text>
+        //     </g>
+        //     <use xlink:href="#circlePath" fill="none" stroke="blue" />
+        // </svg>`
+
+        // //         `<svg width="320" height="400" version="1.1"
+        // //     xmlns="http://www.w3.org/2000/svg"
+        // //     xmlns:xlink="http://www.w3.org/1999/xlink">
+
+        // //     <defs>
+        // //         <path id="circlePath" d="M0,0 Q50,140 0,280 M24,0 Q74,140 24,280 M48,0 Q98,140 48,280 M87.84,61.6 Q108.6,140 87.84,218.4 M96,0 Q146,140 96,280" />
+        // //     </defs>
+        // //     <g fill="dodgerblue" font-size="16" font-family="楷体">
+        // //         <text x="10" y="10" style="letter-spacing: 10;text-shadow: 3px 3px 0px #f00;">
+        // //             <textPath xlink:href="#circlePath">
+        // //                     SVG与文本：使用textPath进行字符串的显示
+        // //             </textPath>
+        // //         </text>
+        // //     </g>
+        // //     <use xlink:href="#circlePath" fill="none" stroke="blue" />
+        // // </svg>`
+        // const svg_img = new Image()
+        // svg_img.src = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svg_text))); //给图片对象写入base64编码的svg流
+        // svg_img.onload = function () {
+        //     console.log(svg_img)
+        //     layer.add(new Konva.Image({
+        //         image: svg_img,
+        //         x: 500,
+        //         y: 50,
+        //         draggable: true
+        //     }))
+        // }
+
+        // function to update line points from anchors
+        function updateDottedLines() {
+            var q = quad;
+            var b = bezier;
+
+            var quadLinePath = layer.findOne('#quadLinePath');
+            // var bezierLinePath = layer.findOne('#bezierLinePath');
+
+            // quadLinePath.points([
+            //     q.start.x(),
+            //     q.start.y(),
+            //     q.control.x(),
+            //     q.control.y(),
+            //     q.end.x(),
+            //     q.end.y(),
+            // ]);
+
+            // bezierLinePath.points([
+            //     b.start.x(),
+            //     b.start.y(),
+            //     b.control1.x(),
+            //     b.control1.y(),
+            //     b.control2.x(),
+            //     b.control2.y(),
+            //     b.end.x(),
+            //     b.end.y(),
+            // ]);
+        }
+
+        // we will use custom shape for curve
+        var quadraticLine = new Konva.TextPath({
+            // text: '111111111111111111111111111111111111111111',
+            // stroke: 'red',
+            // strokeWidth: 4,
+            sceneFunc: (ctx, text) => {
+                console.log(ctx, text)
+                ctx.beginPath();
+                ctx.moveTo(quad.start.x(), quad.start.y());
+                ctx.quadraticCurveTo(
+                    quad.control.x(),
+                    quad.control.y(),
+                    quad.end.x(),
+                    quad.end.y()
+                );
+                ctx.stroke()
+                ctx.fillText(text.attrs.text, quad.start.x(), quad.end.y());
+                ctx.closePath();
+            },
+        });
+        // layer.add(quadraticLine);
+
+        // we will use custom shape for curve
+        // var bezierLine = new Konva.Shape({
+        //     stroke: 'blue',
+        //     strokeWidth: 5,
+        //     sceneFunc: (ctx, shape) => {
+        //         ctx.beginPath();
+        //         ctx.moveTo(bezier.start.x(), bezier.start.y());
+        //         ctx.bezierCurveTo(
+        //             bezier.control1.x(),
+        //             bezier.control1.y(),
+        //             bezier.control2.x(),
+        //             bezier.control2.y(),
+        //             bezier.end.x(),
+        //             bezier.end.y()
+        //         );
+        //         ctx.fillStrokeShape(shape);
+        //     },
+        // });
+        // layer.add(bezierLine);
+
+        // var quadLinePath = new Konva.Line({
+        //     dash: [10, 10, 0, 10],
+        //     strokeWidth: 3,
+        //     stroke: 'black',
+        //     lineCap: 'round',
+        //     id: 'quadLinePath',
+        //     opacity: 0.3,
+        //     points: [0, 0],
+        // });
+        // layer.add(quadLinePath);
+
+        // var bezierLinePath = new Konva.Line({
+        //     dash: [10, 10, 0, 10],
+        //     strokeWidth: 3,
+        //     stroke: 'black',
+        //     lineCap: 'round',
+        //     id: 'bezierLinePath',
+        //     opacity: 0.3,
+        //     points: [0, 0],
+        // });
+        // layer.add(bezierLinePath);
+
+        // special objects to save references to anchors
+        var quad = {
+            start: buildAnchor(60, 30),
+            control: buildAnchor(240, 110),
+            end: buildAnchor(160, 30),
+        };
+
+        var bezier = {
+            // start: buildAnchor(280, 20),
+            // control1: buildAnchor(530, 40),
+            // control2: buildAnchor(480, 150),
+            // end: buildAnchor(300, 150),
+        };
+
+        updateDottedLines();
+    </script>
+</body>
+
+</html>

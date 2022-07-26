@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+
+</body>
+
+
+<script>
+
+    const svg = `<svg width="168" height="264"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <path id="e9CvSE1658395876596text" d="M4.229153608513787,16.306425701525278 Q117.84678714923736,132 4.229153608513787,247.69357429847472 " />
+        <path id="FqMjmo1658395876596text" d="M80.51432210053213,103.07660642538134 Q98.46169678730934,132 80.51432210053213,160.92339357461867 " />
+        <path id="hS9IaQ1658395876596text" d="M67.96849548172837,33.98183288601449 Q157.00908355699278,132 67.96849548172837,230.0181671139855 " />
+        <path id="se1RiA1658395876596" d="M0,12 Q120,132 0,252" />
+        <path id="vs88nF1658395876596" d="M80.51432210053213,103.07660642538134 Q98.46169678730934,132 80.51432210053213,160.92339357461867 " />
+        <path id="M5Pj1o1658395876596" d="M67.96849548172837,33.98183288601449 Q157.00908355699278,132 67.96849548172837,230.0181671139855 " />
+
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2 2" result="shadow"/>
+            <feOffset dx="6" dy="6"/>
+        </filter>
+    </defs>
+    <g fill="#000" font-size="24" stroke="undefined" stroke-width="undefined" font-weight="500" font-style="null">
+        <text opacity="undefined" style="letter-spacing: 6;font-family: undefined;">
+            <textPath xlink:href="#e9CvSE1658395876596text">默认文字内容ab</textPath>
+            <textPath xlink:href="#e9CvSE1658395876596text" style="filter: url(#shadow);">默认文字内容ab</textPath>
+            <textPath xlink:href="#FqMjmo1658395876596text">cde</textPath>
+            <textPath xlink:href="#FqMjmo1658395876596text" style="filter: url(#shadow);">cde</textPath>
+            <textPath xlink:href="#hS9IaQ1658395876596text">哈LMNOPQ</textPath>
+            <textPath xlink:href="#hS9IaQ1658395876596text" style="filter: url(#shadow);">哈LMNOPQ</textPath>
+        </text>
+    </g>
+
+</svg>`
+    svgToPng(svg, (imgData) => {
+        console.log(imgData)
+    });
+    console.log(getSvgUrl(svg))
+    function svgToPng(svg, callback) {
+        const url = getSvgUrl(svg);
+        svgUrlToPng(url, (imgData) => {
+            console.log(  )
+            callback(imgData);
+            URL.revokeObjectURL(url);
+        });
+    }
+    function getSvgUrl(svg) {
+        return URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+    }
+    function svgUrlToPng(svgUrl, callback) {
+        const svgImage = document.createElement('img');
+        // imgPreview.style.position = 'absolute';
+        // imgPreview.style.top = '-9999px';
+        document.body.appendChild(svgImage);
+        svgImage.onload = function () {
+            const canvas = document.createElement('canvas');
+            canvas.width = svgImage.clientWidth;
+            canvas.height = svgImage.clientHeight;
+            const canvasCtx = canvas.getContext('2d');
+            canvasCtx.drawImage(svgImage, 0, 0);
+            const imgData = canvas.toDataURL('image/png');
+            callback(imgData);
+            document.body.removeChild(svgImage);
+        };
+        svgImage.src = svgUrl;
+    }
+
+</script>
+
+</html>
