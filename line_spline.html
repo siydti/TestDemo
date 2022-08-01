@@ -30,12 +30,19 @@
         var hexagon = new Konva.RegularPolygon({
             x: 100,
             y: 150,
-            sides: 3,
+            sides: 5,
             radius: 90,
-            // fill: 'red',
+            // fill: 'green',
             stroke: 'black',
             strokeWidth: 4,
-            draggable: true
+            draggable: true,
+            dash: [10, 10],
+            shadowColor: 'red',
+            shadowBlur: 5,
+            shadowOffset: {
+                x: 1,
+                y: 1
+            }
         });
 
         layer.add(hexagon);
@@ -44,7 +51,7 @@
         var star = new Konva.Star({
             x: 200,
             y: 200,
-            numPoints: 13,
+            numPoints: 5,
             innerRadius: 40,
             outerRadius: 70,
             fill: 'yellow',
@@ -91,25 +98,27 @@
         layer.add(new Konva.Path({
             x: 260,
             y: 40,
-            data: 'M0,0,50,50,51,51,51,52,51,53,51,54,51,55,51,56,51,57,51,58,51,59,51,60,51,61,,52,61,53,61,54,61,54,62,54,63,54,64,54,65,54,66,55,66,56,66,57,66,58,66,59,66,60,66',
+            data: "M0,0 0.000,1.512 1.512,4.536 1.512,12.097 4.536,21.169 7.560,31.754 12.097,49.899 15.121,61.995 18.145,75.604 19.657,84.677 22.681,92.237 24.193,107.358 25.705,108.870 25.705,111.894 ",
             // fill: 'green',
             lineJoin: 'round',
             lineCap: 'round',
             stroke: 'skyblue',
+            strokeWidth: 3,
             draggable: true,
-            dash: [13, 10],
+            // dash: [13, 10],
         }))
 
         layer.add(new Konva.Path({
             x: 360,
             y: 40,
-            data: 'M0,0, 0,50 5,50 5,0 M5,25 0,25',
+            data: 'M0,0, 0,350 15,350 15,0 M15,25 0,25', //
             fill: 'red',
             lineJoin: 'round',
             lineCap: 'round',
             stroke: 'skyblue',
+            strokeWidth: 3,
             draggable: true,
-            dash: [13, 10],
+            // dash: [5, 15],
         }))
 
 
@@ -117,21 +126,21 @@
         var arrow = new Konva.Arrow({
             x: 400,
             y: 300,
-            points: [0, 0, 100, 350, 100, 200],
+            points: [0, 0, 100, 350,], //100, 200
             pointerLength: 30,
             pointerWidth: 35,
-            pointerAtBeginning: true,
-            // fill: 'red',
-            fillPriority: 'pattern',
+            // pointerAtBeginning: true,
+            fill: 'red',
+            // fillPriority: 'pattern',
             stroke: 'black',
-            strokeWidth: 4,
+            strokeWidth: 8,
             dash: [13, 10],
-            lineCap: 'round',
-            lineJoin: 'round',
+            // lineCap: 'round',
+            // lineJoin: 'round',
         });
         const img = new Image()
         img.onload = () => {
-            arrow.fillPatternImage(img)
+            // arrow.fillPatternImage(img)
         }
         img.src = 'http://app.ixuechuang.com/resource/images/poster/backimage.jpg'
 
@@ -143,7 +152,7 @@
         var greenLine = new Konva.Line({
             x: 10,
             y: 430,
-            points: [5, 70, 140, 23, 250, 60, 300, 20],
+            points: [0, 0, 140, 23, 250, 60, 300, 20],
             stroke: 'green',
             strokeWidth: 2,
             lineJoin: 'round',
