@@ -30,7 +30,7 @@
         var hexagon = new Konva.RegularPolygon({
             x: 100,
             y: 150,
-            sides: 5,
+            sides: 4,
             radius: 90,
             // fill: 'green',
             stroke: 'black',
@@ -42,8 +42,11 @@
             shadowOffset: {
                 x: 1,
                 y: 1
-            }
+            },
+            cornerRadius: [10]
+
         });
+        hexagon.rotate(130)
 
         layer.add(hexagon);
 
@@ -58,11 +61,12 @@
             stroke: 'black',
             strokeWidth: 4,
             draggable: true,
-            dash: [13, 10],
+            dash: [13, 20],
             lineCap: 'round',
-            lineJoin: 'round'
+            lineJoin: 'round',
+            cornerRadius: [10]
         });
-
+        star.rotate(130)
         // add the shape to the layer
         layer.add(star);
 
@@ -80,6 +84,12 @@
 
         // add the shape to the layer
         layer.add(ring);
+
+        [hexagon, star, ring].forEach(item => {
+            layer.add(new Konva.Transformer({
+                nodes: [item],
+            }))
+        })
 
         //线  3.824c5.337,7.449,3.625,17.8.3.5.8.3.53.152l2.857,3.988c9.617-6.8.3.51.827-20.277,4.935-29.896C35.591,4.87,22.204,2.658,12.582,9.551z
         var path = new Konva.Path({
@@ -165,6 +175,8 @@
             tension: 0.5,
         });
         layer.add(greenLine);
+
+
 
         // add the layer to the stage
         stage.add(layer);
