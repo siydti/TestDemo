@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>textParticle</title>
+    <script src="https://unpkg.com/konva@8.3.5/konva.min.js"></script>
+</head>
+
+<body>
+    <div id="container"></div>
+    <input type="number" value="16" step="0.1" min="10" max="100" id="input">
+
+    <script>
+        // const input = document.querySelector('#input')
+        var stage = new Konva.Stage({
+            container: 'container',
+            width: 300,
+            height: 300,
+        });
+
+        var layer = new Konva.Layer();
+        stage.add(layer)
+
+        const text = new Konva.Text({
+            x: 10,
+            y: 10,
+            text: 'ABCabc123.你好',
+            fontSize: input.value,
+        })
+        layer.add(text)
+
+        input.oninput = function () {
+            text.fontSize(this.value)
+        }
+
+        console.log(input)
+    </script>
+</body>
+
+</html>
