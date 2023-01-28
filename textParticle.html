@@ -10,21 +10,22 @@
 </head>
 
 <body>
-    <div id="container"></div>
     <input type="number" value="16" step="0.1" min="10" max="100" id="input">
+    <div id="container"></div>
 
     <script>
         // const input = document.querySelector('#input')
         var stage = new Konva.Stage({
             container: 'container',
-            width: 300,
-            height: 300,
+            width: 3000,
+            height: 3000,
         });
 
         var layer = new Konva.Layer();
         stage.add(layer)
 
         const text = new Konva.Text({
+            id: 'text1',
             x: 10,
             y: 10,
             text: 'ABCabc123.你好',
@@ -37,6 +38,60 @@
         }
 
         console.log(input)
+
+
+        const tr = new Konva.Transformer({
+            node: text,
+            centeredScaling: true
+        });
+        layer.add(tr);
+
+        console.log(stage.find('#text1')[0])
+
+
+        layer.add(new Konva.Path({
+            x: 0,
+            y: 0,
+            stroke: 'blue',
+            strokeWidth: 2,
+            data: 'M239,35.2 H319,35.2 M0,75.2 H559 ,75.2 M0,115.2 H559 ,115.2 M0,155.2 H559 ,155.2 M0,195.2 H559 ,195.2 M0,235.2 H559 ,235.2 M0,275.2 H559 ,275.2 M0,315.2 H559 ,315.2 M0,355.2 H559 ,355.2 M0,395.2 H559 ,395.2 M0,435.2 H559 ,435.2 M0,475.2 H559 ,475.2 M0,515.2 H559 ,515.2 M239.88177595760135,555.2 H319.88177595760135,555.2 '
+        }))
+
+
+        let key = "siydti"
+        const Group = new Konva.Group({
+            x: 0,
+            y: 0,
+            // width: 1000,
+            // height: 1000,
+        })
+        for (let i = 0; i < 20; i++) {
+            Group.add(new Konva.Text({
+                y: 50,
+                x: 300 + 100 * i,
+                text: key + i,
+                fontSize: 50,
+                fontFamily: '黑体',
+                // fontStyle: 'bold',
+                fill: '#000',
+                stroke: '#f90',
+                strokeWidth: 0.5,
+
+            }))
+        }
+        layer.add(Group)
+
+        window.setTimeout(() => {
+            Group.find('Text').forEach(Text => {
+                Text.setAttrs({
+                    shadowColor: '#f00',
+                    shadowOpacity: 1,
+                    shadowBlur: 1,
+                    shadowOffsetX: 5,
+                    shadowOffsetY: 5
+                })
+            })
+        }, 2000)
     </script>
 </body>
 

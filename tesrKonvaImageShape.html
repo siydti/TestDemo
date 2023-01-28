@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://unpkg.com/konva@8.3.5/konva.min.js"></script>
+    <meta charset="utf-8" />
+    <title>Konva RegularPolygon Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <script>
+        var stage = new Konva.Stage({
+            container: 'container',
+            width: window.innerWidth,
+            height: window.innerHeight,
+        });
+
+        var layer = new Konva.Layer();
+        stage.add(layer)
+
+        const rect = new Konva.Rect({
+            cornerRadius
+                :
+                [0, 25.4594413894892, 0, 0],
+            dash
+                :
+                [1, 0],
+
+            height
+                :
+                93,
+            lineCap
+                :
+                "",
+            lineJoin
+                :
+                "round",
+            opacity
+                :
+                1,
+            shadowBlur
+                :
+                0,
+            shadowColor
+                :
+                "#455a64",
+            shadowOffsetX
+                :
+                7.1260068621428365,
+            shadowOffsetY
+                :
+                7.126006862142837,
+            shadowOpacity
+                :
+                0.7,
+            stroke
+                :
+                "#669900",
+            strokeWidth
+                :
+                4.773645260529225,
+            type
+                :
+                "Rect",
+            width
+                :
+                158.34904702470442,
+            x
+                :
+                79.17452351235221,
+            y
+                :
+                46.5,
+        })
+        layer.add(rect)
+
+        rect.setAttrs({
+            fillLinearGradientColorStops
+                :
+                [0, '#87CEEB', 0.5, '#FFC0CB', 1, '#FF6600'],
+            fillLinearGradientEndPointX
+                :
+                79.17452351235221,
+            fillLinearGradientEndPointY
+                :
+                93,
+            fillLinearGradientStartPointX
+                :
+                79.17452351235221,
+            fillLinearGradientStartPointY
+                :
+                0,
+            fillPriority
+                :
+                "linear-gradient",
+        })
+    </script>
+</body>

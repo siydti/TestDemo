@@ -118,15 +118,33 @@
             // dash: [13, 10],
         }))
 
-        layer.add(new Konva.Path({
+        const path1 = new Konva.Path({
             x: 360,
             y: 40,
             data: 'M0,0, 0,350 15,350 15,0 M15,25 0,25', //
             fill: 'red',
-            lineJoin: 'round',
+            // lineJoin: 'round',
+            lineCap: 'butt',
+            stroke: '#690',
+            strokeWidth: 10,
+            draggable: true,
+            // dash: [5, 15],
+        })
+        // path1.on('draggabled', () => {
+        //     cons
+        // })
+
+        layer.add(path1)
+
+        layer.add(new Konva.Path({
+            x: 365,
+            y: 40,
+            data: 'M0,147 H584 ', //
+            fill: 'red',
+            // lineJoin: 'round',
             lineCap: 'round',
             stroke: 'skyblue',
-            strokeWidth: 3,
+            strokeWidth: 10,
             draggable: true,
             // dash: [5, 15],
         }))

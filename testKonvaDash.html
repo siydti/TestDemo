@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test-konvaDash</title>
+    <script src="https://unpkg.com/konva@8.3.5/konva.min.js"></script>
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <input type="number" id="val1">
+    <input type="number" id="val2">
+    <button id="btn">提交</button>
+
+    <div id="container"></div>
+
+
+    <script>
+        var width = 150// document.body.clientWidth;
+        var height = 50// document.body.clientHeight;
+
+        var stage = new Konva.Stage({
+            container: 'container',
+            width: width,
+            height: height,
+        });
+
+        var layer = new Konva.Layer();
+        stage.add(layer);
+
+        var path = new Konva.Path({
+            x: 0,
+            y: 25,
+            data: 'M0,0 h150',
+            stroke: '#690',
+            strokeWidth: 10,
+            lineCap: 'round'
+        });
+
+        // add the shape to the layer
+        layer.add(path)
+
+
+        btn.onclick = function () {
+            path.dash([val1.value ? val1.value : 1, val2.value ? val2.value : 1])  //  [ 5, 15 ]
+        }
+
+
+        // var Rect = new Konva.Rect({
+        //     x: 50,
+        //     y: 300,
+        //     // numPoints: 5,
+        //     // outerRadius: 60,
+        //     // innerRadius: 30,
+        //     width: 300,
+        //     height: 300,
+        //     stroke: '#f90',
+        //     lineJoin: "round",
+        //     strokeWidth: 15,
+        //     lineCap: "round",
+        //     lineJoin: "round",
+        //     dash: [30, 30],
+        // });
+        // layer.add(Rect)
+
+
+        // var Star = new Konva.Star({
+        //     x: 350,
+        //     y: 150,
+        //     numPoints: 13,
+        //     outerRadius: 100,
+        //     innerRadius: 80,
+        //     // width: 90,
+        //     // height: 90,
+        //     fill: "#f60",
+        //     stroke: '#f90',
+        //     // lineJoin: "round",
+        //     lineCap: "round",
+        //     strokeWidth: 10,
+        //     dash: [20, 20],
+        // });
+        // layer.add(Star)
+
+    </script>
+</body>
+
+</html>
